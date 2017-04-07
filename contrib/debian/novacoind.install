@@ -1,0 +1,2 @@
+debian/bin/MalCoind usr/bin
+src/MalCoind usr/lib/MalCoin

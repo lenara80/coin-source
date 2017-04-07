@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: MalCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# MalCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable MalCoin service.
+# MalCoin_config (path): Set to /usr/local/etc/MalCoin.conf by default.
+# MalCoin_user:  The user account MalCoin daemon runs as. It uses 'root' user by default.
+# MalCoin_group: The group account MalCoin daemon runs as. It uses 'wheel' group by default.
+# MalCoin_datadir (str): Default to "/var/db/MalCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=MalCoin
+rcvar=MalCoin_enable
+
+: ${MalCoin_enable:=NO}
+: ${MalCoin_config=/usr/local/etc/MalCoin.conf}
+: ${MalCoin_datadir=/var/db/MalCoin}
+: ${MalCoin_user="root"}
+: ${MalCoin_group="wheel"}
+
+required_files=${MalCoin_config}
+command=/usr/local/bin/MalCoind
+MalCoin_chdir=${MalCoin_datadir}
+pidfile="${MalCoin_datadir}/MalCoind.pid"
+stop_cmd=MalCoin_stop
+command_args="-conf=${MalCoin_config} -datadir=${MalCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+MalCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${MalCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${MalCoin_user}:${MalCoin_group} ${MalCoin_datadir}
+}
+
+MalCoin_prestart()
+{
+	if [ ! -d "${MalCoin_datadir}/." ]; then
+		MalCoin_create_datadir || return 1
+	fi
+}
+
+MalCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+MalCoin_stop()
+{
+    MalCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${MalCoin_config} -datadir=${MalCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

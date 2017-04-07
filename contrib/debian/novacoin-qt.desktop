@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=MalCoin
+Comment=MalCoin P2P Cryptocurrency
+Comment[ru]=MalCoin, P2P криптовалюта
+Comment[fr]=MalCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=MalCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/MalCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/MalCoin80.xpm
+MimeType=x-scheme-handler/MalCoin;
+Categories=Office;

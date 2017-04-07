@@ -1,0 +1,5 @@
+MalCoin-qt usr/bin
+share/pixmaps/MalCoin32.xpm usr/share/pixmaps
+share/pixmaps/MalCoin80.xpm usr/share/pixmaps
+debian/MalCoin-qt.desktop usr/share/applications
+debian/MalCoin-qt.protocol usr/share/kde4/services/

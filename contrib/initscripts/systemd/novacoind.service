@@ -1,0 +1,11 @@
+[Unit]
+Description=MalCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=MalCoin
+ExecStart=/opt/MalCoin/MalCoind
+
+[Install]
+WantedBy=multi-user.target
